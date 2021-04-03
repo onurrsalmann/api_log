@@ -1,28 +1,33 @@
 package main
 
 import (
-	"github.com/onurrsalmann/api_log/config"
-	"gorm.io/gorm"
+	"github.com/onurrsalmann/api_log/helper"
+	"github.com/onurrsalmann/api_log/middlewares"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-var db *gorm.DB = config.SetupDatabaseConnection()
-
 func main() {
-	defer config.CloseDatabaseConnection(db)
 	r := gin.Default()
 
-	authRoutes := r.Group("/")
-	//{
-	//	authRoutes.POST("/login", authController.Login)
-	//	authRoutes.POST("/register", authController.Register)
-	//}
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+	r.Use(gin.Recovery(), middlewares.Logger())
+	r.GET("/get", func (context *gin.Context) {
+		res := helper.BuildResponse(true, "OK!", "")
+		context.JSON(http.StatusOK, res)
+	})
+	r.POST("/post", func (context *gin.Context) {
+		res := helper.BuildResponse(true, "OK!", "")
+		context.JSON(http.StatusOK, res)
+	})
+	r.PUT("/put", func (context *gin.Context) {
+		res := helper.BuildResponse(true, "OK!", "")
+		context.JSON(http.StatusOK, res)
+	})
+	r.DELETE("/delete", func(context *gin.Context) {
+		res := helper.BuildResponse(true, "OK!", "")
+		context.JSON(http.StatusOK, res)
 	})
 
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run()
 
 }
